@@ -1,0 +1,76 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 // Wait for the DOM to be ready\
+document.addEventListener('DOMContentLoaded', function() \{\
+    // Find the pendo container\
+    const pendoContainer = document.querySelector('#pendo-guide-container-H0ST6ucu_DeEK_Qhnw1cfqc2c18');\
+    \
+    if (pendoContainer) \{\
+        // Add click event listener\
+        pendoContainer.addEventListener('click', function() \{\
+            // Show Pendo guide\
+            if (window.pendo && typeof pendo.showGuideById === 'function') \{\
+                pendo.showGuideById('Vxrb1Cr-viBmriVsxbFBtoUELDY');\
+                console.log('Pendo guide triggered');\
+            \} else \{\
+                console.log('Pendo not available or showGuideById function not found');\
+            \}\
+        \});\
+        \
+        console.log('Click handler added to pendo container');\
+    \} else \{\
+        console.log('Pendo container not found');\
+    \}\
+\});\
+\
+// Alternative version if the container loads dynamically\
+function addPendoClickHandler() \{\
+    // Define mapping of data-guide-id to guide IDs\
+    const guideMapping = \{\
+        'EzFq1Mn-hm22HlGnsrbnqsb7Ncs': 'bH861v-vBwOlLGn6r0TOzJKhAK0',\
+        'cTNNNs_GF8Vi_Ruqkk023sU3oBc': 'GKm7bOcEkJ4ne73Nt7jAm1DKOgE',\
+        'fPPYNeDB4cVz1PSWXjhsB2JZlKw': 'UluaH36SDxZX-ejpkkLide8B7ZI',\
+        'dsrxOOqpKp3XfAxmjC5nhYdWUnA': '0gnh7MPTqwhD5ES5H_Q3cCyg7AE'\
+    \};\
+    \
+    let handlersAdded = false;\
+    \
+    // Check each mapped container and add handlers to all found containers\
+    for (const [dataGuideId, mappedGuideId] of Object.entries(guideMapping)) \{\
+        const pendoContainer = document.querySelector(`[data-guide-id="$\{dataGuideId\}"]`);\
+        \
+        if (pendoContainer && !pendoContainer.dataset.handlerAdded) \{\
+            pendoContainer.addEventListener('click', function() \{\
+                // Show Pendo guide\
+                if (window.pendo && typeof pendo.showGuideById === 'function') \{\
+                    pendo.showGuideById(mappedGuideId);\
+                    console.log(`Pendo guide triggered with ID: $\{mappedGuideId\}`);\
+                \} else \{\
+                    console.log('Pendo not available or showGuideById function not found');\
+                \}\
+            \});\
+            \
+            // Mark as having handler added\
+            pendoContainer.dataset.handlerAdded = 'true';\
+            console.log(`Click handler added to container with data-guide-id: $\{dataGuideId\}, using guide ID: $\{mappedGuideId\}`);\
+            handlersAdded = true;\
+        \}\
+    \}\
+    \
+    return handlersAdded;\
+\}\
+\
+// Try adding handler every 500ms for up to 10 seconds (in case element loads dynamically)\
+let attempts = 0;\
+const maxAttempts = 20;\
+const interval = setInterval(function() \{\
+    if (addPendoClickHandler() || attempts >= maxAttempts) \{\
+        clearInterval(interval);\
+    \}\
+    attempts++;\
+\}, 500);}
